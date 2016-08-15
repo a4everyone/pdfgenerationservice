@@ -15,6 +15,8 @@ timeout %timeoutsecs%
 goto cycle
 
 :printing
+start cmd /c killff.bat
+"C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/?data=%filename%"
 call setupprint.bat %bucketoutdir%\%filename%-en.pdf
 "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/?data=%filename%&pr"
 
@@ -26,6 +28,8 @@ REM Assume failure
   goto timeoutandrepeat
 )
 
+start cmd /c killff.bat
+"C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/bg/?data=%filename%"
 call setupprint.bat %bucketoutdir%\%filename%-bg.pdf
 "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/bg/?data=%filename%&pr"
 
