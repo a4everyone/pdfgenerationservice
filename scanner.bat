@@ -1,15 +1,27 @@
 @echo off
 
 SET timeoutsecs=30
-SET bucketindir="z:\in"
-SET bucketoutdir=z:\out
+SET bucketindir1="z:\in"
+SET bucketindir2="y:\in"
+SET bucketoutdir="out"
 
 :cycle
-FOR %%F IN (%bucketindir%\*) DO (
+FOR %%F IN (%bucketindir1%\*) DO (
  set filename=%%~nF
+ set filepath=%%F
+ set outpath=z:\%bucketoutdir%
  goto printing
 )
-echo Nothing found. Rinse and repeat
+echo Nothing found in prod. Rinse and repeat
+
+FOR %%F IN (%bucketindir2%\*) DO (
+ set filename=%%~nF
+ set filepath=%%F
+ set outpath=y:\%bucketoutdir%
+ goto printing
+)
+echo Nothing found in stage. Rinse and repeat
+
 :timeoutandrepeat
 timeout %timeoutsecs%
 goto cycle
@@ -17,7 +29,7 @@ goto cycle
 :printing
 start cmd /c killff.bat
 "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/?data=%filename%"
-call setupprint.bat %bucketoutdir%\%filename%-en.pdf
+call setupprint.bat %outpath%\%filename%-en.pdf
 "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/?data=%filename%&pr"
 
 if exist success.txt (
@@ -30,12 +42,12 @@ REM Assume failure
 
 start cmd /c killff.bat
 "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/bg/?data=%filename%"
-call setupprint.bat %bucketoutdir%\%filename%-bg.pdf
+call setupprint.bat %outpath%\%filename%-bg.pdf
 "C:\Program Files (x86)\Mozilla Firefox\firefox.exe" "https://www.a4everyone.com/report/print/bg/?data=%filename%&pr"
 
 if exist success.txt (
-  echo deleting %bucketindir%\"%filename%"
-  del %bucketindir%\"%filename%"
+  echo deleting %filepath%"
+  del %filepath%"
   del success*.txt
 ) else (
 REM Assume failure
