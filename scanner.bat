@@ -3,7 +3,7 @@
 SET timeoutsecs=30
 SET bucketindir1="z:\in"
 SET bucketindir2="y:\in"
-SET bucketoutdir="out"
+SET bucketoutdir=out
 
 :cycle
 FOR %%F IN (%bucketindir1%\*) DO (
